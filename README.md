@@ -123,3 +123,73 @@ void loop() {
 }
 
 
+
+
+
+ESP 32 Code: Sensor Data Transfer (Single data send)
+#include <WiFi.h>
+#include <HTTPClient.h>
+
+const char* ssid = "Galaxy S10+";
+const char* pass = "12345678";
+
+String url = "https://script.google.com/macros/s/AKfycbxIYzYBEVzrMwP46aDYGm18VKxfpTXg5xIi5u5PIHjapK_NUTSlQocmT_mclL9l4ByK/exec?message=";
+
+void setup() {
+  Serial.begin(115200);
+  WiFi.begin(ssid, pass);
+  while (WiFi.status() != WL_CONNECTED) delay(500);
+  Serial.println("\nConnected!");
+}
+
+void loop() {
+  int message = analogRead(34);  // IR sensor on GPIO34
+  
+  HTTPClient http;
+  http.begin(url + String(message));
+  http.GET();
+  http.end();
+  
+  Serial.println(message);
+  delay(500);
+}
+
+
+
+
+
+
+ESP 32 Code: Sensor Data Transfer (Single data send) With Output Response
+#include <WiFi.h>
+#include <HTTPClient.h>
+
+const char* ssid = "Galaxy S10+";
+const char* pass = "12345678";
+
+String url = "https://script.google.com/macros/s/AKfycbxIYzYBEVzrMwP46aDYGm18VKxfpTXg5xIi5u5PIHjapK_NUTSlQocmT_mclL9l4ByK/exec?message=";
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(16, OUTPUT);
+  WiFi.begin(ssid, pass);
+  while (WiFi.status() != WL_CONNECTED) delay(500);
+  Serial.println("\nConnected!");
+}
+
+void loop() {
+  int message = analogRead(34);  // IR sensor on GPIO34
+  
+  if (message > 2000) {
+    digitalWrite(16, HIGH);
+  } else {
+    digitalWrite(16, LOW);
+  }
+  
+  HTTPClient http;
+  http.begin(url + String(message));
+  http.GET();
+  http.end();
+  
+  Serial.println(message);
+  delay(50);
+}
