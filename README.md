@@ -1,5 +1,8 @@
 # ESP32-to-Cloud-Server-Integration
 # Google-App-Script
+
+
+
 //Send data Active Sheet:
 function doGet() {
   data();  // Call your data function
@@ -17,6 +20,9 @@ function data() {
   sheet.getRange("B2").setValue("Arduino");
   sheet.getRange("C2").setValue("Raspberry Pi");
 }
+
+
+
 
 
 
@@ -72,6 +78,9 @@ function doGet(e) {
 
 
 
+
+
+
 ESP 32 Code:(Send Data One Time Only)
 
 #include <WiFi.h>
@@ -94,6 +103,10 @@ void setup() {
 }
 
 void loop() {}
+
+
+
+
 
 
 
@@ -126,6 +139,9 @@ void loop() {
 
 
 
+
+
+
 ESP 32 Code: Sensor Data Transfer (Single data send)
 #include <WiFi.h>
 #include <HTTPClient.h>
@@ -153,6 +169,8 @@ void loop() {
   Serial.println(message);
   delay(500);
 }
+
+
 
 
 
