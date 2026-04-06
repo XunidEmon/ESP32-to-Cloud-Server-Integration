@@ -202,7 +202,7 @@ void loop() {
   } else {
     digitalWrite(16, LOW);
   }
-  
+
   HTTPClient http;
   http.begin(url + String(message));
   http.GET();
@@ -211,3 +211,92 @@ void loop() {
   Serial.println(message);
   delay(50);
 }
+
+
+
+
+
+###Send Multiple Data
+
+//App Script Code(multiple data send):
+function doGet(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  
+  //First time call: create header row with sensor names
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(['Timestamp', 'Sensor 34', 'Sensor 35', 'Sensor 32', 'Sensor 33', 'Sensor 36']);
+  } else {
+    // Check if first row already has headers, if not, insert them
+    var firstRow = sheet.getRange(1, 1, 1, 6).getValues()[0];
+    if (firstRow[0] !== 'Timestamp') {
+      sheet.insertRowBefore(1);
+      sheet.getRange(1, 1, 1, 6).setValues([['Timestamp', 'Sensor 34', 'Sensor 35', 'Sensor 32', 'Sensor 33', 'Sensor 36']]);
+    }
+  }
+  
+  var params = e.parameter;
+  
+  // Read data coming from ESP32
+  var s1 = params.s1 || "0";
+  var s2 = params.s2 || "0";
+  var s3 = params.s3 || "0";
+  var s4 = params.s4 || "0";
+  var s5 = params.s5 || "0";
+  
+  // Append timestamp along with sensor data
+  sheet.appendRow([new Date(), s1, s2, s3, s4, s5]);
+  
+  // Return success response
+  return ContentService.createTextOutput("Success: " + s1 + "," + s2 + "," + s3 + "," + s4 + "," + s5);
+}
+
+
+
+
+
+
+
+
+ESP 32 Code(Multiple Data Send):
+#include <WiFi.h>
+#include <HTTPClient.h>
+
+// WiFi credentials
+const char* ssid = "Galaxy S10+";
+const char* password = "12345678";
+
+// Google Apps Script Web App URL
+const char* scriptUrl = "https://script.google.com/macros/s/AKfycbzXfRdZ-MViTJ7FaFGsxA4vRk2bExn6JcUvuu436kUgI0Wwymu9trs8o8n9PTbFCt_3/exec";
+
+// Analog input pins for sensors
+int pins[] = {34, 35, 32, 33, 36};
+
+void setup() {
+  // Connect to WiFi network
+  WiFi.begin(ssid, password);
+
+  // Wait until WiFi connection is established
+  while (WiFi.status() != WL_CONNECTED) delay(500);
+}
+
+void loop() {
+
+  // Build URL with sensor readings as query parameters
+  // s1 to s5 are the parameter names expected by Google Apps Script
+  String url = String(scriptUrl) + "?s1=" + analogRead(pins[0]) +
+               "&s2=" + analogRead(pins[1]) +
+               "&s3=" + analogRead(pins[2]) +
+               "&s4=" + analogRead(pins[3]) +
+               "&s5=" + analogRead(pins[4]);
+
+  // Create HTTP client and send GET request
+  HTTPClient http;
+  http.begin(url);  // Initialize the HTTP connection
+  http.GET();       // Send the GET request to Google Sheets
+  http.end();       // Close the connection
+  
+  delay(100);
+}
+
+
+
