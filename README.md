@@ -1,3 +1,29 @@
+# 📡 ESP32 to Google Sheets Data Logger
+
+This project demonstrates how to send sensor data from **ESP32** to **Google Sheets** using **Google Apps Script** as a web server.  
+It supports both **single** and **multiple** sensor data transmission over WiFi.
+
+---
+
+## 🚀 Features
+
+- ✅ ESP32 connects to WiFi
+- ✅ Sends sensor data to Google Sheets via HTTP GET request
+- ✅ Google Apps Script receives data and appends to sheet
+- ✅ Supports single and multiple sensor data
+- ✅ Auto-creates headers in Google Sheets
+- ✅ Timestamp added automatically
+
+---
+
+## 🧰 Hardware Required
+
+- ESP32 Development Board
+- IR / Analog Sensors (connected to GPIOs)
+- WiFi network (2.5GHz)
+
+---
+
 # ESP32-to-Cloud-Server-Integration
 # Google-App-Script
 
